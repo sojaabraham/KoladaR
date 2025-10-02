@@ -95,5 +95,57 @@ get_kpi <- function(){
   )
 }
 
+#' Retrieve KPIs based on the filtered Kpi Ids
+#'
+#' Fetches KPIs from the Kolada API, combines paginated results, and returns a tibble.
+#'
+#' @return A tibble with columns:
+#' \describe{
+#'   \item{id}{KPI ID}
+#'   \item{title}{KPI title}
+#'   \item{description}{KPI description}
+#'   \item{municipality_type}{Municipality type associated with the KPI}
+#'   \item{operating_area}{Operating area associated with the KPI}
+#' }
+#'
+#' @examples
+#' get_kpi_by_Ids(c("N00951", "U00002"))
+get_kpi_by_Ids <- function(kpi_id){
+  kpi_list <- lapply(kpi_id, function(id){
+    path <- paste0("/kpi/", id)
+    response <- kolada_get_list(path)
+
+    # If missing, return a placeholder
+    if(is.null(response) || length(response$values) == 0) {
+      list(
+        id = id,
+        title = NA_character_,
+        description = NA_character_,
+        municipality_type = NA_character_,
+        operating_area = NA_character_
+      )
+    } else {
+      # Extract the first (and only) element in values
+      kpi <- response$values[[1]]
+      list(
+        id = kpi$id %||% NA_character_,
+        title = kpi$title %||% NA_character_,
+        description = kpi$description %||% NA_character_,
+        municipality_type = kpi$municipality_type %||% NA_character_,
+        operating_area = kpi$operating_area %||% NA_character_
+      )
+    }
+  })
+
+  # Convert to tibble
+  tibble::tibble(
+    id = sapply(kpi_list, `[[`, "id"),
+    title = sapply(kpi_list, `[[`, "title"),
+    description = sapply(kpi_list, `[[`, "description"),
+    municipality_type = sapply(kpi_list, `[[`, "municipality_type"),
+    operating_area = sapply(kpi_list, `[[`, "operating_area")
+  )
+}
+
 
 
