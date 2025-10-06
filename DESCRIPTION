@@ -7,6 +7,11 @@ Authors@R: c(
       "Soja", "Abraham",
       email = "sojab160@student.liu.se",
       role = c("aut", "cre")
+    ),
+    person(
+      "Saranya", "Sankar",
+      email = "sarsa971@student.liu.se",
+      role = c("aut")
     )
   )
 Description: Tools to download KPIs, metadata and values from Kolada API v3.
@@ -25,5 +30,8 @@ Imports:
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
 Suggests: 
+    knitr,
+    rmarkdown,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+VignetteBuilder: knitr

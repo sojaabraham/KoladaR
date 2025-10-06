@@ -1,0 +1,45 @@
+---
+title: "Kolada API Package With Shiny APP"
+output:
+  rmarkdown::html_document:
+    code_folding: hide
+    theme: lumen
+vignette: >
+  %\VignetteIndexEntry{Kolada API Package: Full Walkthrough}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+KoladaR is an R package that provides a convenient interface to the Kolada API, allowing users to explore Key Performance Indicators (KPIs) and Municipality data for Swedish regions directly from R.
+
+The package also includes a Shiny application that provides an interactive GUI to browse, search, and filter Kolada KPIs and municipalities.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+# Load required packages
+library(openKolada)
+
+cat("Check the Kolada API Base URL\n")
+print(kolada_base())
+
+cat("Load all the KPIs\n")
+kpi <- get_kpi()
+print(head(kpi))
+
+cat("\nLoad KIPs for the specified KPI IDs\n")
+kpi_selected <- get_kpi_by_Ids(c("N00011", "N00003"))
+print(kpi_selected)
+
+cat("Load all municipalities\n")
+muni <- get_municipality()
+print(head(muni))
+
+cat("\nLoad municipalities for the specific municipalities IDs\n")
+muni_selected <- get_municipality_by_Ids(c("0001", "0003"))
+print(muni_selected)
+
+```{r, echo=FALSE}
+cat("Launch the interactive Shiny app by running the following command in your R console:\n\n")
+cat("run_app()\n")
+
+
+
