@@ -6,6 +6,8 @@
 #'
 #' @examples
 #' kolada_base()
+#'
+#' @export
 kolada_base <- function(){
   "https://api.kolada.se/v3"
 }
@@ -23,6 +25,7 @@ kolada_base <- function(){
 #' @examples
 #' kolada_get_list("/kpi")
 #'
+#' @export
 kolada_get_list <- function(path, query = list(), base = kolada_base()){
   url <- paste0(base, path)
   response <- httr::GET(url, query = query, httr::add_headers(Accept = "application/json"))
@@ -42,6 +45,7 @@ kolada_get_list <- function(path, query = list(), base = kolada_base()){
 #' @examples
 #' kolada_get_paginated("/kpi")
 #'
+#' @export
 kolada_get_paginated <- function(path, query = list()){
   api_url = paste0(kolada_base(), path)
   api_data <- list()
@@ -81,6 +85,8 @@ kolada_get_paginated <- function(path, query = list()){
 #' @examples
 #' kpi <- get_kpi()
 #' head(kpi)
+#'
+#' @export
 get_kpi <- function(){
   pages <- kolada_get_paginated("/kpi")
   kpi_list <- lapply(pages, function(page) page$values)
@@ -99,6 +105,8 @@ get_kpi <- function(){
 #'
 #' Fetches KPIs from the Kolada API, combines paginated results, and returns a tibble.
 #'
+#' @param kpi_id Character vector. KPI IDs to retrieve.
+#'
 #' @return A tibble with columns:
 #' \describe{
 #'   \item{id}{KPI ID}
@@ -110,6 +118,8 @@ get_kpi <- function(){
 #'
 #' @examples
 #' get_kpi_by_Ids(c("N00951", "U00002"))
+#'
+#' @export
 get_kpi_by_Ids <- function(kpi_id){
   kpi_list <- lapply(kpi_id, function(id){
     path <- paste0("/kpi/", id)
@@ -146,6 +156,83 @@ get_kpi_by_Ids <- function(kpi_id){
     operating_area = sapply(kpi_list, `[[`, "operating_area")
   )
 }
+
+#' Retrieve municipality list from Kolada API
+#'
+#' Fetches all municipality from the Kolada API, combines paginated results, and returns a tibble.
+#'
+#' @return A tibble with columns:
+#' \describe{
+#'   \item{id}{Municipality ID}
+#'   \item{title}{Municipality title}
+#'   \item{type}{Municipality Type}
+#' }
+#'
+#' @examples
+#' municipality <- get_municipality()
+#' head(municipality)
+#'
+#' @export
+get_municipality <- function(){
+  pages <- kolada_get_paginated("/municipality")
+  municipality <- lapply(pages, function(page) page$values)
+  municipality <- do.call(c, municipality)
+
+  #Convert to tibble
+  tibble::tibble(
+    id = vapply(municipality, function(x) x$id %||% NA_character_, character(1)),
+    title = vapply(municipality, function(x) x$title %||% NA_character_, character(1)),
+    type = vapply(municipality, function(x) x$type %||% NA_character_, character(1))
+  )
+}
+
+#' Retrieve municipalities by its exact IDs
+#'
+#' Fetches municipalities from the Kolada API, combines paginated results, and returns a tibble.
+#'
+#' @param id Character vector. Municipality IDs to retrieve.
+#'
+#' @return A tibble with columns:
+#' \describe{
+#'   \item{id}{Municipality ID}
+#'   \item{title}{Municipality title}
+#'   \item{type}{Municipality type}
+#' }
+#'
+#' @examples
+#' get_municipality_by_Ids(c("0001", "0003"))
+#'
+#' @export
+get_municipality_by_Ids <- function(id){
+  municipality <- lapply(id, function(id){
+    path <- paste0("/municipality/", id)
+    response <- kolada_get_list(path)
+
+    if(is.null(response) || length(response$values) == 0) {
+      list(
+        id = id,
+        title = NA_character_,
+        type = NA_character_
+      )
+    } else {
+      municipality <- response$values[[1]]
+      list(
+        id = municipality$id %||% NA_character_,
+        title = municipality$title %||% NA_character_,
+        type = municipality$type %||% NA_character_
+      )
+    }
+  })
+
+  # Convert to tibble
+  tibble::tibble(
+    id = sapply(municipality, `[[`, "id"),
+    title = sapply(municipality, `[[`, "title"),
+    type = sapply(municipality, `[[`, "type")
+  )
+}
+
+
 
 
 

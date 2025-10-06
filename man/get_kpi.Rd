@@ -21,4 +21,5 @@ Fetches all KPIs from the Kolada API, combines paginated results, and returns a 
 \examples{
 kpi <- get_kpi()
 head(kpi)
+
 }

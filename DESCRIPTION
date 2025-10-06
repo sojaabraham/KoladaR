@@ -14,7 +14,14 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports: 
-    httr
+    httr,
+    shiny,
+    DT,
+    dplyr,
+    magrittr,
+    rlang,
+    jsonlite,
+    tibble
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
 Suggests: 

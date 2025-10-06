@@ -6,6 +6,9 @@
 \usage{
 get_kpi_by_Ids(kpi_id)
 }
+\arguments{
+\item{kpi_id}{Character vector. KPI IDs to retrieve.}
+}
 \value{
 A tibble with columns:
 \describe{
@@ -21,4 +24,5 @@ Fetches KPIs from the Kolada API, combines paginated results, and returns a tibb
 }
 \examples{
 get_kpi_by_Ids(c("N00951", "U00002"))
+
 }

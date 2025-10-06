@@ -14,4 +14,5 @@ Returns the base URL of Kolada API
 }
 \examples{
 kolada_base()
+
 }
