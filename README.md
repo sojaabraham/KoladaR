@@ -1,5 +1,5 @@
 
-# openKolada
+# Kolada API Package
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/sojaabraham/KoladaR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/sojaabraham/KoladaR/actions/workflows/R-CMD-check.yaml)
@@ -11,7 +11,7 @@ The package also includes a Shiny application that provides an interactive GUI t
 
 ## Installation
 
-You can install the development version of LinearRegression from [GitHub](https://github.com/) with:
+You can install the development version of kolada package from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("pak")
